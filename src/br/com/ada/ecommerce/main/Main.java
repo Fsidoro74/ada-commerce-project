@@ -1,16 +1,13 @@
 package br.com.ada.ecommerce.main;
 
-import br.com.ada.ecommerce.model.Carrinho;
-import br.com.ada.ecommerce.model.Cliente;
-import br.com.ada.ecommerce.model.Pedido;
-import br.com.ada.ecommerce.model.Produto;
+import br.com.ada.ecommerce.model.*;
 import br.com.ada.ecommerce.notificacao.EmailNotificador;
 import br.com.ada.ecommerce.notificacao.Notificador;
 import br.com.ada.ecommerce.repository.ClienteRepository;
 import br.com.ada.ecommerce.repository.PedidoRepository;
 import br.com.ada.ecommerce.repository.ProdutoRepository;
 import br.com.ada.ecommerce.service.PedidoService;
-import br.com.ada.ecommerce.model.StatusPedido;
+
 import java.util.List;
 
 public class Main {
@@ -19,20 +16,20 @@ public class Main {
         ClienteRepository clienteRepository = new ClienteRepository();
         ProdutoRepository produtoRepository = new ProdutoRepository();
         PedidoRepository pedidoRepository = new PedidoRepository();
-
-        Notificador notificador = new EmailNotificador(); // Podemos trocar para SMSNotificador facilmente
+        Notificador notificador = new EmailNotificador();
         PedidoService pedidoService = new PedidoService(notificador);
 
         System.out.println("--- Ada Commerce Iniciado ---");
 
-        // 2. Cadastro de Clientes - IDs são gerados automaticamente pelo construtor de Cliente
+        // 2. Cadastro de Clientes
         Cliente cliente1 = new Cliente("Fabio Mendes", "123.456.789-00", "fabio.mendes@email.com");
         Cliente cliente2 = new Cliente("Maria Santos", "987.654.321-11", "maria.santos@email.com");
         clienteRepository.salvar(cliente1);
         clienteRepository.salvar(cliente2);
-        System.out.println("\nClientes cadastrados:");
-        clienteRepository.listarTodos().forEach(c -> System.out.println("- " + c.getNome() + " (ID: " + c.getId() + ")"));
 
+        System.out.println("\nClientes cadastrados:");
+        clienteRepository.listarTodos().forEach(c ->
+                System.out.println("- " + c.getNome() + " (ID: " + c.getId() + ")"));
 
         // 3. Cadastro de Produtos
         Produto tv = new Produto(101, "Smart TV LED 50'", 2500.00, 2299.99, 5);
@@ -41,11 +38,12 @@ public class Main {
         produtoRepository.salvar(tv);
         produtoRepository.salvar(smartphone);
         produtoRepository.salvar(foneOuvido);
+
         System.out.println("\nProdutos em estoque:");
-        produtoRepository.listarTodos().forEach(p -> System.out.println("- " + p.getNome() + " (Estoque: " + p.getQuantidade() + ")"));
+        produtoRepository.listarTodos().forEach(p ->
+                System.out.println("- " + p.getNome() + " (Estoque: " + p.getQuantidade() + ")"));
 
-
-        // 4. Fluxo de Compra para o Cliente João
+        // 4. Fluxo de Compra para o Cliente Fabio
         System.out.println("\n--- Fluxo de Compra para " + cliente1.getNome() + " ---");
         Carrinho carrinhoJoao = new Carrinho();
 
@@ -71,13 +69,16 @@ public class Main {
             System.err.println("Erro ao manipular item no carrinho: " + e.getMessage());
         }
 
-        // Finalizar o Pedido
+        // 5. Finalizar o Pedido
         Pedido pedidoJoao = null;
         try {
-            // Criamos o pedido a partir do carrinho e do cliente
             pedidoJoao = new Pedido(cliente1);
-            for (var itemVenda : carrinhoJoao.getItens()) {
-                pedidoJoao.adicionarProduto(itemVenda.getProduto(), itemVenda.getQuantidade());
+            for (ItemVenda itemVenda : carrinhoJoao.getItens()) {
+                pedidoJoao.adicionarProduto(
+                        itemVenda.getProduto(),
+                        itemVenda.getQuantidade(),
+                        itemVenda.getPrecoVenda() // ✅ Correção aqui
+                );
             }
 
             pedidoService.finalizarPedido(pedidoJoao);
@@ -87,7 +88,7 @@ public class Main {
             System.err.println("Erro ao finalizar pedido: " + e.getMessage());
         }
 
-        // Realizar Pagamento
+        // 6. Pagamento
         if (pedidoJoao != null && pedidoJoao.getStatus() == StatusPedido.AGUARDANDO_PAGAMENTO) {
             try {
                 pedidoService.pagar(pedidoJoao);
@@ -96,7 +97,7 @@ public class Main {
             }
         }
 
-        // Realizar Entrega
+        // 7. Entrega
         if (pedidoJoao != null && pedidoJoao.getStatus() == StatusPedido.PAGO) {
             try {
                 pedidoService.entregar(pedidoJoao);
@@ -105,17 +106,20 @@ public class Main {
             }
         }
 
+        // 8. Estoque após compra
         System.out.println("\nEstoque de produtos após a compra:");
-        produtoRepository.listarTodos().forEach(p -> System.out.println("- " + p.getNome() + " (Estoque: " + p.getQuantidade() + ")"));
+        produtoRepository.listarTodos().forEach(p ->
+                System.out.println("- " + p.getNome() + " (Estoque: " + p.getQuantidade() + ")"));
 
-        // 5. Consultar Histórico de Pedidos do Cliente João
+        // 9. Histórico de Pedidos
         System.out.println("\n--- Histórico de Pedidos de " + cliente1.getNome() + " ---");
         List<Pedido> pedidosDoJoao = pedidoRepository.buscarPorClienteId(cliente1.getId());
         if (pedidosDoJoao.isEmpty()) {
             System.out.println("Nenhum pedido encontrado para " + cliente1.getNome());
         } else {
             pedidosDoJoao.forEach(p -> {
-                System.out.println("Pedido #" + p.getId() + " - Total: R$ " + String.format("%.2f", p.calcularTotal()) + " - Status: " + p.getStatus());
+                System.out.printf("Pedido #%d - Total: R$ %.2f - Status: %s%n",
+                        p.getId(), p.calcularTotal(), p.getStatus());
             });
         }
     }

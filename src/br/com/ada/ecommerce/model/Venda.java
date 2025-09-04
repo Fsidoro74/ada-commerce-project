@@ -1,6 +1,6 @@
 // ...
+// ...import br.c
 import br.com.ada.ecommerce.model.StatusPedido;
-// ...
 
 public class Venda {
     private StatusPedido status;

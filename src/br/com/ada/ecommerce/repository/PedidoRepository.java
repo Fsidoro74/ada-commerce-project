@@ -1,12 +1,13 @@
 package br.com.ada.ecommerce.repository;
 
 import br.com.ada.ecommerce.model.Pedido;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors; // <-- Adicione esta linha
+import java.util.Collections;
+import java.util.stream.Collectors;
+
+
 
 public class PedidoRepository {
     private final List<Pedido> pedidos = new ArrayList<>();
