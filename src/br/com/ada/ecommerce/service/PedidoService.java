@@ -1,10 +1,13 @@
 package br.com.ada.ecommerce.service;
 
-import br.com.ada.ecommerce.model.ItemVenda;
+import br.com.ada.ecommerce.model.Cliente;
+import br.com.ada.ecommerce.model.ItemVenda; // Importe ItemVenda
 import br.com.ada.ecommerce.model.Pedido;
 import br.com.ada.ecommerce.model.Produto;
 import br.com.ada.ecommerce.model.StatusPedido;
 import br.com.ada.ecommerce.notificacao.Notificador;
+
+import java.util.Map; // Mantenha, mas o loop será sobre List<ItemVenda>
 
 public class PedidoService {
 
