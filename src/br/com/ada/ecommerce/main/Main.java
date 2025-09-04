@@ -27,7 +27,9 @@ public class Main {
             System.out.println("2. Adicionar produto ao carrinho");
             System.out.println("3. Ver carrinho");
             System.out.println("4. Finalizar pedido");
-            System.out.println("5. Sair");
+            System.out.println("5. Realizar pagamento");
+            System.out.println("6. Realizar entrega");
+            System.out.println("7. Sair");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
 
@@ -41,37 +43,58 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.print("Digite o número do produto que deseja adicionar: ");
+                    System.out.print("Digite o número do produto que deseja adicionar do 1 ao 3: ");
                     int indiceProduto = scanner.nextInt();
                     if (indiceProduto >= 0 && indiceProduto < produtosDisponiveis.size()) {
-                        pedidoService.adicionarProdutoAoPedido(pedido, produtosDisponiveis.get(indiceProduto));
-                        System.out.println("Produto adicionado!");
+                        Produto produtoSelecionado = produtosDisponiveis.get(indiceProduto);
+
+                        System.out.print("Quantidade: ");
+                        int quantidade = scanner.nextInt();
+
+                        System.out.print("Preço de venda (R$): ");
+                        double precoVenda = scanner.nextDouble();
+
+                        pedidoService.adicionarItemAoPedido(pedido, produtoSelecionado, quantidade, precoVenda);
+                        System.out.println("✅ Item adicionado ao carrinho!");
                     } else {
-                        System.out.println("Produto inválido.");
+                        System.out.println("Digite o número do produto que deseja adicionar (1 ao 3): ");
                     }
                     break;
 
                 case 3:
                     System.out.println("\n🧾 Carrinho:");
-                    pedidoService.exibirResumoPedido(pedido);
+                    pedido.exibirResumo();
                     break;
 
                 case 4:
-                    System.out.println("✅ Pedido finalizado!");
-                    pedidoService.exibirResumoPedido(pedido);
+                    if (pedido.podeFinalizar()) {
+                        pedido.setStatus(br.com.ada.ecommerce.model.StatusPedido.AGUARDANDO_PAGAMENTO);
+                        System.out.println("✅ Pedido finalizado! Status: Aguardando pagamento.");
+                        pedido.exibirResumo();
+                        // Aqui você pode simular envio de e-mail
+                    } else {
+                        System.out.println("⚠️ Pedido não pode ser finalizado. Verifique se há itens e valor maior que zero.");
+                    }
                     break;
 
                 case 5:
+                    pedidoService.realizarPagamento(pedido);
+                    break;
+
+                case 6:
+                    pedidoService.realizarEntrega(pedido);
+                    break;
+
+                case 7:
                     System.out.println("👋 Saindo...");
                     break;
+
 
                 default:
                     System.out.println("Opção inválida.");
             }
-        } while (opcao != 5);
+        } while (opcao != 7);
 
         scanner.close();
     }
 }
-
-
