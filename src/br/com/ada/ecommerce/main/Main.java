@@ -114,9 +114,29 @@ public class Main {
         if (pedidosDoJoao.isEmpty()) {
             System.out.println("Nenhum pedido encontrado para " + cliente1.getNome());
         } else {
-            pedidosDoJoao.forEach(p -> {
-                System.out.println("Pedido #" + p.getId() + " - Total: R$ " + String.format("%.2f", p.calcularTotal()) + " - Status: " + p.getStatus());
-            });
+            pedidosDoJoao.forEach(p -> System.out.println("Pedido #" + p.getId() + " - Total: R$ " + String.format("%.2f", p.calcularTotal()) + " - Status: " + p.getStatus()));
+        }
+
+        // 6. Exemplo: Como fazer um novo pedido (novo carrinho) para o mesmo cliente
+        System.out.println("\n--- Novo Pedido para " + cliente1.getNome() + " ---");
+        Carrinho novoCarrinho = new Carrinho();
+        try {
+            novoCarrinho.adicionarItem(foneOuvido, 2); // adiciona 2 fones
+            novoCarrinho.exibirCarrinho();
+
+            Pedido novoPedido = new Pedido(cliente1);
+            for (var itemVenda : novoCarrinho.getItens()) {
+                novoPedido.adicionarProduto(itemVenda.getProduto(), itemVenda.getQuantidade());
+            }
+
+            pedidoService.finalizarPedido(novoPedido);
+            pedidoRepository.salvar(novoPedido);
+            pedidoService.pagar(novoPedido); // pagar
+            pedidoService.entregar(novoPedido); // entregar → FINALIZADO
+
+            novoPedido.exibirResumo();
+        } catch (Exception e) {
+            System.err.println("Erro no novo pedido: " + e.getMessage());
         }
     }
 }
