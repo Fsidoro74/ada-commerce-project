@@ -121,6 +121,51 @@ public class Main {
             }
         } while (opcao != 5);
 
+<<<<<<< HEAD
         scanner.close();
+=======
+        // Realizar Entrega
+        if (pedidoJoao != null && pedidoJoao.getStatus() == StatusPedido.PAGO) {
+            try {
+                pedidoService.entregar(pedidoJoao);
+            } catch (IllegalStateException e) {
+                System.err.println("Erro ao entregar pedido: " + e.getMessage());
+            }
+        }
+
+        System.out.println("\nEstoque de produtos após a compra:");
+        produtoRepository.listarTodos().forEach(p -> System.out.println("- " + p.getNome() + " (Estoque: " + p.getQuantidade() + ")"));
+
+        // 5. Consultar Histórico de Pedidos do Cliente João
+        System.out.println("\n--- Histórico de Pedidos de " + cliente1.getNome() + " ---");
+        List<Pedido> pedidosDoJoao = pedidoRepository.buscarPorClienteId(cliente1.getId());
+        if (pedidosDoJoao.isEmpty()) {
+            System.out.println("Nenhum pedido encontrado para " + cliente1.getNome());
+        } else {
+            pedidosDoJoao.forEach(p -> System.out.println("Pedido #" + p.getId() + " - Total: R$ " + String.format("%.2f", p.calcularTotal()) + " - Status: " + p.getStatus()));
+        }
+
+        // 6. Exemplo: Como fazer um novo pedido (novo carrinho) para o mesmo cliente
+        System.out.println("\n--- Novo Pedido para " + cliente1.getNome() + " ---");
+        Carrinho novoCarrinho = new Carrinho();
+        try {
+            novoCarrinho.adicionarItem(foneOuvido, 2); // adiciona 2 fones
+            novoCarrinho.exibirCarrinho();
+
+            Pedido novoPedido = new Pedido(cliente1);
+            for (var itemVenda : novoCarrinho.getItens()) {
+                novoPedido.adicionarProduto(itemVenda.getProduto(), itemVenda.getQuantidade());
+            }
+
+            pedidoService.finalizarPedido(novoPedido);
+            pedidoRepository.salvar(novoPedido);
+            pedidoService.pagar(novoPedido); // pagar
+            pedidoService.entregar(novoPedido); // entregar → FINALIZADO
+
+            novoPedido.exibirResumo();
+        } catch (Exception e) {
+            System.err.println("Erro no novo pedido: " + e.getMessage());
+        }
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
     }
 }

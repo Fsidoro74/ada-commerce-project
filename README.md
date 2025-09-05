@@ -49,6 +49,7 @@ O sistema foi modelado com as seguintes classes principais:
    git clone https://github.com/Fsidoro74/ada-commerce-project.git
    ```
 
+<<<<<<< HEAD
 2. Compile e rode com recursos de preview habilitados.
 
 ### Opção A) Terminal (Windows PowerShell)
@@ -78,3 +79,18 @@ Observações:
    ```
 
 Pronto! Agora o projeto utiliza e continua habilitado para recursos em preview do Java 21.
+=======
+2. Compile e execute pela IDE (classe Main) ou via linha de comando (Java 17).
+
+### Como rodar testes automatizados (sem Maven/Gradle)
+
+Foi incluído um test runner simples em Java puro:
+- Classe: `br.com.ada.ecommerce.tests.TestRunner`
+- Veja também: `src/br/com/ada/ecommerce/README_TESTS.md`
+
+Passos:
+1) Compile as classes do projeto (src).
+2) Execute a classe `br.com.ada.ecommerce.tests.TestRunner`.
+3) Verifique no console as linhas `[TEST_PASS]` e o resumo `[TEST_SUMMARY]`.
+
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe

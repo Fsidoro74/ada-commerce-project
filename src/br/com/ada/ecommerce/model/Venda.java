@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 package br.com.ada.ecommerce.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+=======
+// ...
+// ...import br.c
+import br.com.ada.ecommerce.model.StatusPedido;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
 
 public class Venda {
     private Long id;
