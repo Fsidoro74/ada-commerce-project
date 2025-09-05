@@ -2,18 +2,14 @@ package br.com.ada.ecommerce.service;
 
 import br.com.ada.ecommerce.model.Cliente;
 import br.com.ada.ecommerce.model.ItemPedido;
-import br.com.ada.ecommerce.model.ItemVenda;
 import br.com.ada.ecommerce.model.Pedido;
 import br.com.ada.ecommerce.model.Produto;
 import br.com.ada.ecommerce.model.StatusPedido;
 import br.com.ada.ecommerce.notificacao.Notificador;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PedidoService {
 
-    private Notificador notificador;
+    private final Notificador notificador;
 
     public PedidoService(Notificador notificador) {
         this.notificador = notificador;
@@ -47,9 +43,9 @@ public class PedidoService {
      * Devolve os produtos de um pedido ao estoque.
      */
     public void devolverProdutosAoEstoque(Pedido pedido) {
-        for (ItemVenda itemVenda : pedido.getItens()) {
-            Produto produto = itemVenda.getProduto();
-            int quantidade = itemVenda.getQuantidade();
+        for (ItemPedido item : pedido.getItens()) {
+            Produto produto = item.getProduto();
+            int quantidade = item.getQuantidade();
             produto.incrementarEstoque(quantidade);
             System.out.println("Produto " + produto.getNome() + " devolvido ao estoque. Estoque atual: " + produto.getQuantidade());
         }
@@ -89,12 +85,5 @@ public class PedidoService {
         pedido.setStatus(StatusPedido.FINALIZADO);
         notificador.notificar(pedido.getCliente(), "Seu pedido #" + pedido.getId() + " foi entregue com sucesso!");
         System.out.println("Pedido #" + pedido.getId() + " entregue. Status: " + pedido.getStatus());
-    }
-
-    /**
-     * Envia email de notificação (simulação).
-     */
-    private void enviarEmail(Cliente cliente, String mensagem) {
-        System.out.println("📧 Enviando e-mail para " + cliente.getNome() + ": " + mensagem);
     }
 }

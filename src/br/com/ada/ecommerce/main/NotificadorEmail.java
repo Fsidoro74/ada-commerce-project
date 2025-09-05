@@ -1,13 +1,12 @@
-package br.com.ada.ecommerce.main;
+package br.com.ada.ecommerce.notificacao;
 
 import br.com.ada.ecommerce.model.Cliente;
-import br.com.ada.ecommerce.notificacao.Notificador;
 
-public class NotificadorEmail implements Notificador {
+public class NotificadorEmail implements br.com.ada.ecommerce.notificacao.Notificador {
 
     @Override
     public void notificar(Cliente cliente, String mensagem) {
         // Simulação de envio de e-mail
-        System.out.println("Enviando e-mail para " + cliente.getDocumento() + ": " + mensagem);
+        System.out.println("📧 Enviando e-mail para " + cliente.getDocumento() + ": " + mensagem);
     }
 }

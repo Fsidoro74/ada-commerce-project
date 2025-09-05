@@ -18,10 +18,10 @@ public class VendaService {
         this.clienteService = clienteService;
     }
 
-    public Venda criarVenda(String cpfCliente) {
-        Cliente cliente = clienteService.buscarPorCpf(cpfCliente);
+    public Venda criarVenda(String documentoCliente) {
+        Cliente cliente = clienteService.buscarPorDocumento(documentoCliente);
         if (cliente == null) {
-            throw new IllegalArgumentException("Cliente não encontrado com o CPF: " + cpfCliente);
+            throw new IllegalArgumentException("Cliente não encontrado com o documento: " + documentoCliente);
         }
 
         Venda venda = new Venda();
@@ -33,15 +33,15 @@ public class VendaService {
         return venda;
     }
 
-    public List<Venda> buscarVendasPorCpf(String cpf) {
+    public List<Venda> buscarVendasPorDocumento(String documento) {
         return vendaRepository.buscarTodos().stream()
-                .filter(venda -> venda.getCliente().getCpf().equals(cpf))
-                .collect(Collectors.toList());
+                              .filter(venda -> venda.getCliente().getDocumento().equals(documento))
+                              .collect(Collectors.toList());
     }
 
     public Venda buscarVendaPorId(Long id) {
         return vendaRepository.buscarPorId(id)
-                .orElseThrow(() -> new IllegalArgumentException("Venda não encontrada com o ID: " + id));
+                              .orElseThrow(() -> new IllegalArgumentException("Venda não encontrada com o ID: " + id));
     }
 
     public void atualizarStatusVenda(Long idVenda, StatusPedido novoStatus) {

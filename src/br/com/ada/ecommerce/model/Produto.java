@@ -1,145 +1,84 @@
 package br.com.ada.ecommerce.model;
 
-/**
- * Classe que representa um produto no sistema de e-commerce.
- */
+import java.util.Objects;
+
 public class Produto {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
-    private int id;
+
+    private long id;
     private String nome;
-    private double precoOriginal;
-    private double precoVenda; // Pode ser diferente do original
-    private int quantidade; // Este é o estoque
-
-    public Produto(int id, String nome, double precoOriginal, double precoVenda, int quantidade) {
-        this.id = id;
-        this.nome = nome;
-        this.precoOriginal = precoOriginal;
-        this.precoVenda = precoVenda;
-        this.quantidade = quantidade;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public double getPrecoOriginal() {
-        return precoOriginal;
-    }
-
-    public double getPrecoVenda() {
-        return precoVenda;
-    }
-
-    // ✅ Método adicional para compatibilidade com chamadas getPreco()
-    public double getPreco() {
-        return precoVenda;
-    }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    /**
-     * Decrementa a quantidade do produto em estoque.
-     * Realiza validação para garantir que o estoque não se torne negativo.
-     * @param quantidade A quantidade a ser removida do estoque.
-     * @throws IllegalArgumentException se a quantidade for maior que o estoque disponível.
-     */
-    public void decrementarEstoque(int quantidade) {
-        if (this.quantidade < quantidade) {
-            throw new IllegalArgumentException("Estoque insuficiente para o produto: " + this.nome);
-        }
-        this.quantidade -= quantidade;
-    }
-
-    /**
-     * Incrementa a quantidade do produto em estoque.
-     * @param quantidade A quantidade a ser adicionada ao estoque.
-     */
-    public void incrementarEstoque(int quantidade) {
-        this.quantidade += quantidade;
-    }
-
-    @Override
-    public String toString() {
-        return nome + " (R$ " + precoVenda + ") - Estoque: " + quantidade;
-<<<<<<< HEAD
-=======
-    private final int id;
-    private final String nome;
     private double preco;
-    private int quantidade;
+    private int quantidade; // estoque disponível
 
-    /**
-     * Construtor do Produto
-     * @param id Identificador único do produto
-     * @param nome Nome do produto
-     * @param preco Preço do produto
-     * @param quantidade Quantidade em estoque
-     * @throws IllegalArgumentException se o preço ou quantidade forem negativos
-     */
-    public Produto(int id, String nome, double preco, int quantidade) {
-        if (preco < 0) {
-            throw new IllegalArgumentException("O preço não pode ser negativo");
-        }
-        if (quantidade < 0) {
-            throw new IllegalArgumentException("A quantidade não pode ser negativa");
-        }
-
+    public Produto(long id, String nome, double preco, int quantidade) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
     }
 
-    public int getId() { 
-        return id; 
+    public long getId() {
+        return id;
     }
 
-    public String getNome() { 
-        return nome; 
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public double getPreco() { 
-        return preco; 
+    public String getNome() {
+        return nome;
     }
 
-    /**
-     * Atualiza o preço do produto
-     * @param preco Novo preço do produto
-     * @throws IllegalArgumentException se o preço for negativo
-     */
-    public void setPreco(double preco) { 
-        if (preco < 0) {
-            throw new IllegalArgumentException("O preço não pode ser negativo");
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public void decrementarEstoque(int quantidade) {
+        if (this.quantidade < quantidade) {
+            throw new IllegalArgumentException("Estoque insuficiente para o produto: " + nome);
         }
-        this.preco = preco; 
+        this.quantidade -= quantidade;
     }
 
-    public int getQuantidade() { 
-        return quantidade; 
+    public void incrementarEstoque(int quantidade) {
+        this.quantidade += quantidade;
     }
 
-    /**
-     * Atualiza a quantidade em estoque do produto
-     * @param quantidade Nova quantidade em estoque
-     * @throws IllegalArgumentException se a quantidade for negativa
-     */
-    public void setQuantidade(int quantidade) { 
-        if (quantidade < 0) {
-            throw new IllegalArgumentException("A quantidade não pode ser negativa");
-        }
-        this.quantidade = quantidade; 
->>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", preco=" + preco +
+                ", quantidade=" + quantidade +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Produto)) return false;
+        Produto produto = (Produto) o;
+        return id == produto.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

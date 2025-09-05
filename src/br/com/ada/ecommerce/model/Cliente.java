@@ -1,181 +1,78 @@
 package br.com.ada.ecommerce.model;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import java.util.concurrent.atomic.AtomicLong;
-
-=======
-=======
-import java.util.concurrent.atomic.AtomicLong;
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 import java.util.Objects;
 
-/**
- * Classe que representa um cliente no sistema de e-commerce.
- */
-<<<<<<< HEAD
->>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 public class Cliente {
-    private static final AtomicLong ID_COUNTER = new AtomicLong();
 
-    private int id;
+    private Long id;
     private String nome;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
-    private String documento; // Documento de identificação (ex: CPF)
-    private String email; // E-mail de contato
+    private String email;
+    private String documento; // CPF ou CNPJ
 
-    /**
-     * Construtor do Cliente
-     * @param id Identificador único do cliente
-     * @param nome Nome do cliente
-     * @param cpf CPF do cliente
-     * @throws IllegalArgumentException se o CPF for inválido
-     */
-    public Cliente(int id, String nome, String cpf) {
+    public Cliente(Long id, String nome, String email, String documento) {
         this.id = id;
         this.nome = nome;
-        this.documento = cpf;
-    }
-
-    // Construtor adicional sem e-mail: gera ID automaticamente
-    public Cliente(String nome, String documento) {
-        this.id = (int) ID_COUNTER.incrementAndGet();
-        this.nome = nome;
-        this.documento = documento;
-        this.email = null;
-    }
-
-    // Construtor compatível com o Main: nome, documento (CPF) e e-mail
-    public Cliente(String nome, String documento, String email) {
-        this.id = (int) ID_COUNTER.incrementAndGet();
-        this.nome = nome;
-        this.documento = documento;
         this.email = email;
-<<<<<<< HEAD
-=======
-    private String cpf;
+        this.documento = documento;
+    }
 
-    /**
-     * Construtor do Cliente
-     * @param id Identificador único do cliente
-     * @param nome Nome do cliente
-     * @param cpf CPF do cliente
-     * @throws IllegalArgumentException se o CPF for inválido
-     */
-    public Cliente(int id, String nome, String cpf) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
         this.nome = nome;
-        setCpf(cpf);
->>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 
-    public int getId() { return id; }
-    public String getNome() { return nome; }
-    public String getCpf() { return documento; }
-
-    /**
-     * Define o CPF do cliente após validação
-     * @param cpf CPF a ser validado e definido
-     * @throws IllegalArgumentException se o CPF for inválido
-     */
-    public void setCpf(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
-
-        // Remove caracteres especiais do CPF
-        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
-
-        if (cpfLimpo.length() != 11) {
-            throw new IllegalArgumentException("CPF deve conter 11 dígitos");
-        }
-
-        if (!validarCPF(cpfLimpo)) {
-            throw new IllegalArgumentException("CPF inválido");
-        }
-
-        this.documento = formatarCPF(cpfLimpo);
+    public String getEmail() {
+        return email;
     }
 
-    /**
-     * Valida o CPF utilizando o algoritmo padrão
-     * @param cpf CPF a ser validado (apenas números)
-     * @return true se o CPF for válido, false caso contrário
-     */
-    private boolean validarCPF(String cpf) {
-        // Verifica se todos os dígitos são iguais
-        if (cpf.matches("(\\d)\\1{10}")) return false;
-
-        // Calcula primeiro dígito verificador
-        int soma = 0;
-        for (int i = 0; i < 9; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
-        }
-        int primeiroDigito = 11 - (soma % 11);
-        if (primeiroDigito > 9) primeiroDigito = 0;
-
-        // Calcula segundo dígito verificador
-        soma = 0;
-        for (int i = 0; i < 10; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
-        }
-        int segundoDigito = 11 - (soma % 11);
-        if (segundoDigito > 9) segundoDigito = 0;
-
-        // Verifica se os dígitos calculados são iguais aos dígitos informados
-        return Character.getNumericValue(cpf.charAt(9)) == primeiroDigito &&
-               Character.getNumericValue(cpf.charAt(10)) == segundoDigito;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    /**
-     * Formata o CPF no padrão XXX.XXX.XXX-XX
-     * @param cpf CPF sem formatação
-     * @return CPF formatado
-     */
-    private String formatarCPF(String cpf) {
-        return String.format("%s.%s.%s-%s",
-            cpf.substring(0, 3),
-            cpf.substring(3, 6),
-            cpf.substring(6, 9),
-            cpf.substring(9));
-    }
-
-    // Getter compatível com chamadas existentes no projeto
     public String getDocumento() {
         return documento;
     }
 
-    public String getEmail() { return email; }
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
 
-    // Getter alternativo mantido por compatibilidade
-    public String getDocumentoIdentificacao() {
+    // Compatibilidade com código legado
+    public String getCpf() {
         return documento;
     }
 
     @Override
     public String toString() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        return nome + " (" + documento + ")";
-=======
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
         return "Cliente{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
-                ", cpf='" + documento + '\'' +
+                ", email='" + email + '\'' +
+                ", documento='" + documento + '\'' +
                 '}';
-<<<<<<< HEAD
->>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
-=======
->>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cliente)) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
-
