@@ -5,18 +5,27 @@ import java.util.Collections;
 import java.util.List;
 
 public class Pedido {
+<<<<<<< HEAD
+    private static long SEQ = 1;
+    private final long id;
+=======
     private static int SEQUENCE = 1;
 
     private final int id;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
     private final Cliente cliente;
     private final List<ItemVenda> itens = new ArrayList<>();
     private StatusPedido status;
 
     public Pedido(Cliente cliente) {
+<<<<<<< HEAD
+        this.id = SEQ++;
+=======
         if (cliente == null) {
             throw new IllegalArgumentException("O cliente do pedido não pode ser nulo.");
         }
         this.id = SEQUENCE++;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
         this.cliente = cliente;
         this.status = StatusPedido.ABERTO;
     }
@@ -24,6 +33,8 @@ public class Pedido {
     public int getId() {
         return id;
     }
+
+    public long getId() { return id; }
 
     public Cliente getCliente() {
         return cliente;
@@ -80,5 +91,29 @@ public class Pedido {
         System.out.println("Status: " + status);
         System.out.println("---------------------------\n");
     }
+
+    public double calcularTotal() {
+        return produtos.stream().mapToDouble(Produto::getPreco).sum();
+    }
+
+    public void exibirResumo() {
+        System.out.println("👤 Cliente: " + cliente.getNome());
+
+        if (produtos.isEmpty()) {
+            System.out.println("🛒 Nenhum produto no pedido.");
+            return;
+        }
+
+        System.out.println("📦 Produtos:");
+        double total = 0;
+        for (Produto produto : produtos) {
+            System.out.println("- " + produto.getNome() + " (R$ " + produto.getPreco() + ")");
+            total += produto.getPreco();
+        }
+
+        System.out.printf("💰 Total do Pedido: R$ %.2f%n", total);
+    }
+
 }
+
 

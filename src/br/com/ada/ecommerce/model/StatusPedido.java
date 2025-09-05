@@ -6,5 +6,3 @@ public enum StatusPedido {
     PAGO,
     FINALIZADO
 }
-
-
