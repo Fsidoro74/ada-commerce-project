@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        Cliente cliente = new Cliente(1, "João Silva");
+        Cliente cliente = new Cliente(1, "João Silva", "123.456.789-09");
         Pedido pedido = new Pedido(cliente);
         ProdutoRepository produtoRepo = new ProdutoRepository();
         PedidoService pedidoService = new PedidoService();
