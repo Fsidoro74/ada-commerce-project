@@ -1,7 +1,8 @@
+
+
 # 🛒 Ada Commerce Project
 
-
-[![Java](https://img.shields.io/badge/Java-17-red)](https://www.oracle.com/java/)
+[![Java](https://img.shields.io/badge/Java-21-orange)](https://www.oracle.com/java/)
 [![IDE](https://img.shields.io/badge/IDE-IntelliJ_IDEA-blue)](https://www.jetbrains.com/idea/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Fsidoro74-black?logo=github)](https://github.com/Fsidoro74/ada-commerce-project)
@@ -35,7 +36,7 @@ O sistema foi modelado com as seguintes classes principais:
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java 17**
+- **Java 21 (Preview features habilitadas)**
 - **IntelliJ IDEA**
 - **Git & GitHub**
 
@@ -44,6 +45,36 @@ O sistema foi modelado com as seguintes classes principais:
 ## 📦 Como Executar o Projeto
 
 1. Clone este repositório:
-   ```bash
+   ```
    git clone https://github.com/Fsidoro74/ada-commerce-project.git
+   ```
 
+2. Compile e rode com recursos de preview habilitados.
+
+### Opção A) Terminal (Windows PowerShell)
+
+- Compilar (gera classes em `out`):
+  ```
+  javac --enable-preview --release 21 -d out -cp src src\br\com\ada\ecommerce\**\*.java src\Main.java
+  ```
+
+- Executar a aplicação:
+  ```
+  java --enable-preview -cp out br.com.ada.ecommerce.main.Main
+  ```
+
+Observações:
+- Requer JDK 21 instalado e configurado no PATH.
+- O comando usa curingas do Windows para compilar todas as classes do pacote `br.com.ada.ecommerce` e também `src\Main.java` se necessário.
+
+### Opção B) IntelliJ IDEA
+
+1. Vá em File > Project Structure > Project:
+   - Project SDK: selecione JDK 21
+   - Language level: 21 (Preview features)
+2. Vá em Run > Edit Configurations, escolha a configuração de execução do Main e, em VM options, adicione:
+   ```
+   --enable-preview
+   ```
+
+Pronto! Agora o projeto utiliza e continua habilitado para recursos em preview do Java 21.

@@ -1,5 +1,8 @@
 package br.com.ada.ecommerce.model;
 
+/**
+ * Classe que representa um produto no sistema de e-commerce.
+ */
 public class Produto {
     private int id;
     private String nome;
