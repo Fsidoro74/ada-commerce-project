@@ -1,18 +1,25 @@
 package br.com.ada.ecommerce.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Pedido {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private static long SEQ = 1;
+    private final long id;
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     private static int SEQUENCE = 1;
 
     private final int id;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
     private final Cliente cliente;
     private final List<ItemVenda> itens = new ArrayList<>();
     private StatusPedido status;
+<<<<<<< HEAD
 =======
 
     private final Cliente cliente;
@@ -20,35 +27,53 @@ public class Pedido {
     private StatusPedido status;
     private final List<ItemPedido> itens;
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 
     public Pedido(Cliente cliente) {
+<<<<<<< HEAD
+        this.id = SEQ++;
+=======
         if (cliente == null) {
             throw new IllegalArgumentException("O cliente do pedido não pode ser nulo.");
         }
         this.id = SEQUENCE++;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
         this.cliente = cliente;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
         this.status = StatusPedido.ABERTO;
     }
 
     public int getId() {
         return id;
+<<<<<<< HEAD
 =======
         this.dataCriacao = LocalDate.now();
         this.status = StatusPedido.ABERTO;
         this.itens = new ArrayList<>();
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
+
+    public long getId() { return id; }
 
     public Cliente getCliente() {
         return cliente;
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public StatusPedido getStatus() {
         return status;
     }
 
+<<<<<<< HEAD
 =======
     public LocalDate getDataCriacao() {
         return dataCriacao;
@@ -59,11 +84,16 @@ public class Pedido {
     }
 
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public void setStatus(StatusPedido status) {
         this.status = status;
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public List<ItemVenda> getItens() {
         return Collections.unmodifiableList(itens);
     }
@@ -107,6 +137,7 @@ public class Pedido {
         System.out.println("Status: " + status);
         System.out.println("---------------------------\n");
     }
+<<<<<<< HEAD
 }
 
 =======
@@ -138,33 +169,35 @@ public class Pedido {
             System.out.println("❌ Não é possível alterar quantidade. Verifique o status ou índice.");
         }
     }
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 
     public double calcularTotal() {
-        return itens.stream().mapToDouble(ItemPedido::calcularSubtotal).sum();
-    }
-
-    public boolean podeFinalizar() {
-        return !itens.isEmpty() && calcularTotal() > 0;
+        return produtos.stream().mapToDouble(Produto::getPreco).sum();
     }
 
     public void exibirResumo() {
-        System.out.println("📅 Data do Pedido: " + dataCriacao);
         System.out.println("👤 Cliente: " + cliente.getNome());
-        System.out.println("📌 Status: " + status);
 
-        if (itens.isEmpty()) {
-            System.out.println("🛒 Nenhum item no pedido.");
+        if (produtos.isEmpty()) {
+            System.out.println("🛒 Nenhum produto no pedido.");
             return;
         }
 
-        System.out.println("📦 Itens:");
-        for (int i = 0; i < itens.size(); i++) {
-            ItemPedido item = itens.get(i);
-            System.out.printf("%d - %s | Quantidade: %d | Preço: R$ %.2f | Subtotal: R$ %.2f%n",
-                    i, item.getProduto().getNome(), item.getQuantidade(), item.getPrecoVenda(), item.calcularSubtotal());
+        System.out.println("📦 Produtos:");
+        double total = 0;
+        for (Produto produto : produtos) {
+            System.out.println("- " + produto.getNome() + " (R$ " + produto.getPreco() + ")");
+            total += produto.getPreco();
         }
 
-        System.out.printf("💰 Total do Pedido: R$ %.2f%n", calcularTotal());
+        System.out.printf("💰 Total do Pedido: R$ %.2f%n", total);
     }
+
 }
+<<<<<<< HEAD
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+
+
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89

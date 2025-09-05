@@ -1,16 +1,19 @@
 package br.com.ada.ecommerce.service;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 import br.com.ada.ecommerce.model.Cliente;
 import br.com.ada.ecommerce.model.ItemVenda; // Importe ItemVenda
-import br.com.ada.ecommerce.model.Pedido;
-import br.com.ada.ecommerce.model.Produto;
+import br.com.ada.ecommerce.model.*;
 import br.com.ada.ecommerce.model.StatusPedido;
 import br.com.ada.ecommerce.notificacao.Notificador;
 
 import java.util.Map; // Mantenha, mas o loop será sobre List<ItemVenda>
 
 public class PedidoService {
+<<<<<<< HEAD
 
     private Notificador notificador;
 
@@ -38,6 +41,10 @@ public class PedidoService {
         produto.decrementarEstoque(quantidade);
         pedido.adicionarProduto(produto, quantidade); // Lógica para adicionar ao pedido
         System.out.println("Produto " + produto.getNome() + " adicionado ao pedido. Estoque atual: " + produto.getQuantidade());
+=======
+    public void adicionarProdutoAoPedido(Pedido pedido, Produto produto) {
+        pedido.adicionarProduto(produto);
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 
     /**
@@ -45,6 +52,7 @@ public class PedidoService {
      * @param pedido O pedido a ser exibido.
      */
     public void exibirResumoPedido(Pedido pedido) {
+<<<<<<< HEAD
         pedido.exibirResumo();
     }
 
@@ -135,5 +143,16 @@ public class PedidoService {
     private void enviarEmail(Cliente cliente, String mensagem) {
         System.out.println("📧 Enviando e-mail para " + cliente.getNome() + ": " + mensagem);
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+        double total = 0;
+        System.out.println("Cliente: " + pedido.getCliente().getNome());
+        for (Produto produto : pedido.getProdutos()) {
+            System.out.println("- " + produto.getNome() + ": R$ " + produto.getPreco());
+            total += produto.getPreco();
+        }
+        System.out.println("Total: R$ " + total);
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 }
+
+

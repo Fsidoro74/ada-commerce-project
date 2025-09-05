@@ -5,6 +5,9 @@ package br.com.ada.ecommerce.model;
  */
 public class Produto {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     private int id;
     private String nome;
     private double precoOriginal;
@@ -68,6 +71,7 @@ public class Produto {
     @Override
     public String toString() {
         return nome + " (R$ " + precoVenda + ") - Estoque: " + quantidade;
+<<<<<<< HEAD
 =======
     private final int id;
     private final String nome;
@@ -135,5 +139,7 @@ public class Produto {
         }
         this.quantidade = quantidade; 
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 }

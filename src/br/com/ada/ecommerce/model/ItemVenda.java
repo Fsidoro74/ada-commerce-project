@@ -1,6 +1,9 @@
 package br.com.ada.ecommerce.model;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 public class ItemVenda {
     private Produto produto;
     private int quantidade;
@@ -19,6 +22,7 @@ public class ItemVenda {
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
+<<<<<<< HEAD
 =======
 import java.util.Objects;
 
@@ -41,6 +45,8 @@ public class ItemVenda {
     public void setId(Long id) {
         this.id = id;
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 
     public Produto getProduto() {
@@ -48,18 +54,24 @@ public class ItemVenda {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public void setProduto(Produto produto) {
         this.produto = produto;
     }
 
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public int getQuantidade() {
         return quantidade;
     }
 
     public void setQuantidade(int quantidade) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
         if (quantidade <= 0) {
             throw new IllegalArgumentException("A quantidade do item deve ser maior que zero.");
         }
@@ -75,6 +87,7 @@ public class ItemVenda {
     // Se precisar de alteração de preço (ex: promoções), a lógica deve ser mais complexa
     // e provavelmente na classe Carrinho antes da criação do ItemVenda.
 }
+<<<<<<< HEAD
 =======
         this.quantidade = quantidade;
     }
@@ -115,3 +128,5 @@ public class ItemVenda {
     }
 }
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89

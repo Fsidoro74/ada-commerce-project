@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ...
 // ...import br.c
 import br.com.ada.ecommerce.model.StatusPedido;
@@ -13,12 +14,19 @@ public class Venda {
 
     // Método para obter o status
 =======
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 package br.com.ada.ecommerce.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+=======
+// ...
+// ...import br.c
+import br.com.ada.ecommerce.model.StatusPedido;
+>>>>>>> 716dcb39db47a89030607c596407e4da9f215ebe
 
 public class Venda {
     private Long id;
@@ -51,17 +59,23 @@ public class Venda {
     public void setDataVenda(LocalDateTime dataVenda) {
         this.dataVenda = dataVenda;
     }
+<<<<<<< HEAD
 
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public StatusPedido getStatus() {
         return status;
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // Método para alterar o status
     public void setStatus(StatusPedido novoStatus) {
         this.status = novoStatus;
 =======
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     public void setStatus(StatusPedido status) {
         this.status = status;
     }
@@ -86,7 +100,7 @@ public class Venda {
 
     private void calcularValorTotal() {
         this.valorTotal = itens.stream()
-                .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
+                .mapToDouble(item -> item.getPrecoVenda() * item.getQuantidade())
                 .sum();
     }
 
@@ -112,6 +126,9 @@ public class Venda {
                 ", status=" + status +
                 ", valorTotal=" + valorTotal +
                 '}';
+<<<<<<< HEAD
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 }

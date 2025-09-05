@@ -2,17 +2,26 @@ package br.com.ada.ecommerce.repository;
 
 import br.com.ada.ecommerce.model.Cliente;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.Collections;
 =======
 import java.util.ArrayList;
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+
+import java.util.ArrayList;
+import java.util.Collections;
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 import java.util.List;
 import java.util.Optional;
 
 public class ClienteRepository {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     private final List<Cliente> clientes = new ArrayList<>();
 
     /**
@@ -51,6 +60,7 @@ public class ClienteRepository {
         return clientes.stream()
                 .filter(c -> c.getId() == id)
                 .findFirst();
+<<<<<<< HEAD
 =======
     private List<Cliente> clientes = new ArrayList<>();
 
@@ -72,5 +82,7 @@ public class ClienteRepository {
         return clientes.stream()
                 .anyMatch(cliente -> cliente.getCpf().equals(cpf));
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 }

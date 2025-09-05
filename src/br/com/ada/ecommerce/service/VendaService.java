@@ -1,18 +1,19 @@
-import br.com.ada.ecommerce.model.Cliente;
-import br.com.ada.ecommerce.model.Venda;
-import br.com.ada.ecommerce.model.StatusPedido;
-import br.com.ada.ecommerce.repository.VendaRepository;
-import br.com.ada.ecommerce.service.ClienteService;
+package br.com.ada.ecommerce.service;
 
-import java.util.List;
+import br.com.ada.ecommerce.model.Cliente;
+import br.com.ada.ecommerce.model.StatusPedido;
+import br.com.ada.ecommerce.model.Venda;
+import br.com.ada.ecommerce.repository.VendaRepository;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public static class vendaService {
+public class VendaService {
     private final VendaRepository vendaRepository;
     private final ClienteService clienteService;
 
-    public vendaService(VendaRepository vendaRepository, ClienteService clienteService) {
+    public VendaService(VendaRepository vendaRepository, ClienteService clienteService) {
         this.vendaRepository = vendaRepository;
         this.clienteService = clienteService;
     }
@@ -51,17 +52,5 @@ public static class vendaService {
 
     public List<Venda> listarTodasVendas() {
         return vendaRepository.buscarTodos();
-    }
-}
-
-        Venda venda = new Venda(cliente);
-        vendas.add(venda);
-        return venda;
-    }
-
-    public List<Venda> buscarVendasPorCpf(String cpf) {
-        return vendas.stream()
-                .filter(venda -> venda.getCliente().getCpf().equals(cpf))
-                .collect(Collectors.toList());
     }
 }

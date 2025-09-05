@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public class ProdutoRepository {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     private final List<Produto> produtos = new ArrayList<>();
 
     /**
@@ -20,6 +23,7 @@ public class ProdutoRepository {
         // Para este exercício em memória, simplesmente adicionamos.
         this.produtos.add(produto);
         System.out.println("Produto " + produto.getNome() + " salvo no repositório.");
+<<<<<<< HEAD
 =======
     public List<Produto> buscarTodos() {
         List<Produto> produtos = new ArrayList<>();
@@ -57,6 +61,8 @@ public class ProdutoRepository {
 
         return produtos;
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 
     /**

@@ -1,28 +1,45 @@
 package br.com.ada.ecommerce.model;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.concurrent.atomic.AtomicLong;
 
 =======
+=======
+import java.util.concurrent.atomic.AtomicLong;
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 import java.util.Objects;
 
 /**
  * Classe que representa um cliente no sistema de e-commerce.
  */
+<<<<<<< HEAD
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
 public class Cliente {
     private static final AtomicLong ID_COUNTER = new AtomicLong();
 
     private int id;
     private String nome;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     private String documento; // Documento de identificação (ex: CPF)
     private String email; // E-mail de contato
 
-    public Cliente(int id, String nome, String documento) {
+    /**
+     * Construtor do Cliente
+     * @param id Identificador único do cliente
+     * @param nome Nome do cliente
+     * @param cpf CPF do cliente
+     * @throws IllegalArgumentException se o CPF for inválido
+     */
+    public Cliente(int id, String nome, String cpf) {
         this.id = id;
         this.nome = nome;
-        this.documento = documento;
+        this.documento = cpf;
     }
 
     // Construtor adicional sem e-mail: gera ID automaticamente
@@ -39,6 +56,7 @@ public class Cliente {
         this.nome = nome;
         this.documento = documento;
         this.email = email;
+<<<<<<< HEAD
 =======
     private String cpf;
 
@@ -54,11 +72,13 @@ public class Cliente {
         this.nome = nome;
         setCpf(cpf);
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 
     public int getId() { return id; }
     public String getNome() { return nome; }
-    public String getCpf() { return cpf; }
+    public String getCpf() { return documento; }
 
     /**
      * Define o CPF do cliente após validação
@@ -81,7 +101,7 @@ public class Cliente {
             throw new IllegalArgumentException("CPF inválido");
         }
 
-        this.cpf = formatarCPF(cpfLimpo);
+        this.documento = formatarCPF(cpfLimpo);
     }
 
     /**
@@ -142,14 +162,20 @@ public class Cliente {
     @Override
     public String toString() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         return nome + " (" + documento + ")";
 =======
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
         return "Cliente{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
+                ", cpf='" + documento + '\'' +
                 '}';
+<<<<<<< HEAD
 >>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
+=======
+>>>>>>> 49e9eb5dfd2bc2dcb0b89b08be7376bb42488f89
     }
 }
 
