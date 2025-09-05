@@ -20,11 +20,20 @@ public class Main {
         ProdutoRepository produtoRepository = new ProdutoRepository();
         PedidoRepository pedidoRepository = new PedidoRepository();
 
+<<<<<<< HEAD
         Notificador notificador = new EmailNotificador(); // Podemos trocar para SMSNotificador facilmente
         PedidoService pedidoService = new PedidoService(notificador);
+=======
+        Scanner scanner = new Scanner(System.in);
+        Cliente cliente = new Cliente(1, "João Silva", "123.456.789-09");
+        Pedido pedido = new Pedido(cliente);
+        ProdutoRepository produtoRepo = new ProdutoRepository();
+        PedidoService pedidoService = new PedidoService();
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
 
         System.out.println("--- Ada Commerce Iniciado ---");
 
+<<<<<<< HEAD
         // 2. Cadastro de Clientes - IDs são gerados automaticamente pelo construtor de Cliente
         Cliente cliente1 = new Cliente("Fabio Mendes", "123.456.789-00", "fabio.mendes@email.com");
         Cliente cliente2 = new Cliente("Maria Santos", "987.654.321-11", "maria.santos@email.com");
@@ -32,8 +41,23 @@ public class Main {
         clienteRepository.salvar(cliente2);
         System.out.println("\nClientes cadastrados:");
         clienteRepository.listarTodos().forEach(c -> System.out.println("- " + c.getNome() + " (ID: " + c.getId() + ")"));
+=======
+        int opcao;
+        do {
+            System.out.println("\n🛒 Menu E-commerce:");
+            System.out.println("1. Ver produtos disponíveis");
+            System.out.println("2. Adicionar produto ao carrinho");
+            System.out.println("3. Ver carrinho");
+            System.out.println("4. Finalizar pedido");
+            System.out.println("5. Realizar pagamento");
+            System.out.println("6. Realizar entrega");
+            System.out.println("7. Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
 
 
+<<<<<<< HEAD
         // 3. Cadastro de Produtos
         Produto tv = new Produto(101, "Smart TV LED 50'", 2500.00, 2299.99, 5);
         Produto smartphone = new Produto(102, "Smartphone Android 12", 1500.00, 1400.00, 10);
@@ -79,6 +103,60 @@ public class Main {
             for (var itemVenda : carrinhoJoao.getItens()) {
                 pedidoJoao.adicionarProduto(itemVenda.getProduto(), itemVenda.getQuantidade());
             }
+=======
+                case 2:
+                    System.out.print("Digite o número do produto que deseja adicionar do 1 ao 3: ");
+                    int indiceProduto = scanner.nextInt();
+                    if (indiceProduto >= 0 && indiceProduto < produtosDisponiveis.size()) {
+                        Produto produtoSelecionado = produtosDisponiveis.get(indiceProduto);
+
+                        System.out.print("Quantidade: ");
+                        int quantidade = scanner.nextInt();
+
+                        System.out.print("Preço de venda (R$): ");
+                        double precoVenda = scanner.nextDouble();
+
+                        pedidoService.adicionarItemAoPedido(pedido, produtoSelecionado, quantidade, precoVenda);
+                        System.out.println("✅ Item adicionado ao carrinho!");
+                    } else {
+                        System.out.println("Digite o número do produto que deseja adicionar (1 ao 3): ");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n🧾 Carrinho:");
+                    pedido.exibirResumo();
+                    break;
+
+                case 4:
+                    if (pedido.podeFinalizar()) {
+                        pedido.setStatus(br.com.ada.ecommerce.model.StatusPedido.AGUARDANDO_PAGAMENTO);
+                        System.out.println("✅ Pedido finalizado! Status: Aguardando pagamento.");
+                        pedido.exibirResumo();
+                        // Aqui você pode simular envio de e-mail
+                    } else {
+                        System.out.println("⚠️ Pedido não pode ser finalizado. Verifique se há itens e valor maior que zero.");
+                    }
+                    break;
+
+                case 5:
+                    pedidoService.realizarPagamento(pedido);
+                    break;
+
+                case 6:
+                    pedidoService.realizarEntrega(pedido);
+                    break;
+
+                case 7:
+                    System.out.println("👋 Saindo...");
+                    break;
+
+
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        } while (opcao != 7);
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
 
             pedidoService.finalizarPedido(pedidoJoao);
             pedidoRepository.salvar(pedidoJoao);

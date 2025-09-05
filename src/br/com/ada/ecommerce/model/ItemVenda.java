@@ -1,5 +1,6 @@
 package br.com.ada.ecommerce.model;
 
+<<<<<<< HEAD
 public class ItemVenda {
     private Produto produto;
     private int quantidade;
@@ -18,17 +19,47 @@ public class ItemVenda {
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
+=======
+import java.util.Objects;
+
+public class ItemVenda {
+    private Long id;
+    private Produto produto;
+    private int quantidade;
+    private double precoUnitario;
+
+    public ItemVenda(Produto produto, int quantidade) {
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.precoUnitario = produto.getPreco();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
     }
 
     public Produto getProduto() {
         return produto;
     }
 
+<<<<<<< HEAD
+=======
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
     public int getQuantidade() {
         return quantidade;
     }
 
     public void setQuantidade(int quantidade) {
+<<<<<<< HEAD
         if (quantidade <= 0) {
             throw new IllegalArgumentException("A quantidade do item deve ser maior que zero.");
         }
@@ -44,3 +75,43 @@ public class ItemVenda {
     // Se precisar de alteração de preço (ex: promoções), a lógica deve ser mais complexa
     // e provavelmente na classe Carrinho antes da criação do ItemVenda.
 }
+=======
+        this.quantidade = quantidade;
+    }
+
+    public double getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(double precoUnitario) {
+        this.precoUnitario = precoUnitario;
+    }
+
+    public double getSubTotal() {
+        return precoUnitario * quantidade;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemVenda itemVenda = (ItemVenda) o;
+        return Objects.equals(id, itemVenda.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ItemVenda{" +
+                "produto=" + produto.getNome() +
+                ", quantidade=" + quantidade +
+                ", precoUnitario=" + precoUnitario +
+                ", subTotal=" + getSubTotal() +
+                '}';
+    }
+}
+>>>>>>> 6a55be8a4cde4c9b101a7e74b09a0774750662ae
