@@ -7,18 +7,32 @@ import br.com.ada.ecommerce.repository.ClienteRepository;
 import br.com.ada.ecommerce.repository.ProdutoRepository;
 import br.com.ada.ecommerce.service.PedidoService;
 import br.com.ada.ecommerce.notificacao.Notificador;
-import br.com.ada.ecommerce.notificacao.EmailNotificador; // ou SMSNotificador
+import br.com.ada.ecommerce.notificacao.EmailNotificador;
+import br.com.ada.ecommerce.notificacao.SMSNotificador;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("--- Ada Commerce Iniciado ---");
 
+        Scanner scanner = new Scanner(System.in);
+
         // Repositórios
         ClienteRepository clienteRepository = new ClienteRepository();
         ProdutoRepository produtoRepository = new ProdutoRepository();
 
-        // Notificador (pode trocar para SMSNotificador se quiser)
-        Notificador notificador = new EmailNotificador();
+        // Escolher tipo de notificação
+        System.out.println("Escolha o tipo de notificação:");
+        System.out.println("1 - E-mail");
+        System.out.println("2 - SMS");
+        System.out.print("Opção: ");
+        int opcao = scanner.nextInt();
+
+        Notificador notificador = (opcao == 2) ? new SMSNotificador() : new EmailNotificador();
+        String tipoNotificacao = (opcao == 2) ? "SMS" : "E-mail";
+
+        System.out.println("\n📢 Notificação escolhida: " + tipoNotificacao + "\n");
 
         // Serviço de pedidos com notificador
         PedidoService pedidoService = new PedidoService(notificador);
@@ -39,7 +53,8 @@ public class Main {
         pedidoService.adicionarProdutoAoPedido(pedido, celular, 2);
 
         // 4. Exibir resumo inicial
-        pedido.exibirResumo();
+        System.out.println("📄 Resumo do Pedido Inicial:");
+        System.out.println(pedidoService.gerarResumoPedido(pedido));
 
         // 5. Finalizar, pagar e entregar
         pedidoService.finalizarPedido(pedido);
@@ -47,6 +62,9 @@ public class Main {
         pedidoService.entregar(pedido);
 
         // 6. Exibir resumo final
-        pedido.exibirResumo();
+        System.out.println("📦 Resumo do Pedido Final:");
+        System.out.println(pedidoService.gerarResumoPedido(pedido));
+
+        scanner.close();
     }
 }

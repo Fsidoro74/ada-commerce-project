@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Carrinho {
-    private List<ItemVenda> itens;
+
+    private final List<ItemVenda> itens;
 
     public Carrinho() {
         this.itens = new ArrayList<>();
@@ -20,20 +21,16 @@ public class Carrinho {
             throw new IllegalArgumentException("A quantidade a adicionar deve ser maior que zero.");
         }
 
-        // Decrementa o estoque do produto ANTES de adicionar ao carrinho
         produto.decrementarEstoque(quantidade);
 
         for (ItemVenda item : itens) {
             if (item.getProduto().getId() == produto.getId()) {
                 item.setQuantidade(item.getQuantidade() + quantidade);
-                System.out.println("Quantidade do produto '" + produto.getNome() + "' atualizada no carrinho.");
                 return;
             }
         }
 
-        // Corrigido: produto.getPreco() em vez de getPrecoVenda()
         this.itens.add(new ItemVenda(produto, quantidade, produto.getPreco()));
-        System.out.println("Produto '" + produto.getNome() + "' adicionado ao carrinho.");
     }
 
     public void removerItem(Produto produto) {
@@ -48,9 +45,8 @@ public class Carrinho {
         if (itemRemover != null) {
             produto.incrementarEstoque(itemRemover.getQuantidade());
             itens.remove(itemRemover);
-            System.out.println("Produto '" + produto.getNome() + "' removido do carrinho. Estoque atual: " + produto.getQuantidade());
         } else {
-            throw new IllegalArgumentException("Produto '" + produto.getNome() + "' não encontrado no carrinho.");
+            throw new IllegalArgumentException("Produto não encontrado no carrinho.");
         }
     }
 
@@ -61,26 +57,26 @@ public class Carrinho {
 
         for (ItemVenda item : itens) {
             if (item.getProduto().getId() == produto.getId()) {
-                int diferencaQuantidade = novaQuantidade - item.getQuantidade();
+                int diferenca = novaQuantidade - item.getQuantidade();
 
-                if (diferencaQuantidade > 0) {
-                    produto.decrementarEstoque(diferencaQuantidade);
-                } else if (diferencaQuantidade < 0) {
-                    produto.incrementarEstoque(Math.abs(diferencaQuantidade));
+                if (diferenca > 0) {
+                    produto.decrementarEstoque(diferenca);
+                } else if (diferenca < 0) {
+                    produto.incrementarEstoque(Math.abs(diferenca));
                 }
 
                 item.setQuantidade(novaQuantidade);
-                System.out.println("Quantidade do produto '" + produto.getNome() + "' alterada para " + novaQuantidade + ". Estoque atual: " + produto.getQuantidade());
                 return;
             }
         }
-        throw new IllegalArgumentException("Produto '" + produto.getNome() + "' não encontrado no carrinho.");
+
+        throw new IllegalArgumentException("Produto não encontrado no carrinho.");
     }
 
     public double calcularTotal() {
         return itens.stream()
-                    .mapToDouble(item -> item.getPrecoVenda() * item.getQuantidade())
-                    .sum();
+                .mapToDouble(item -> item.getPrecoVenda() * item.getQuantidade())
+                .sum();
     }
 
     public void esvaziarCarrinho() {
@@ -88,26 +84,32 @@ public class Carrinho {
             item.getProduto().incrementarEstoque(item.getQuantidade());
         }
         this.itens.clear();
-        System.out.println("Carrinho esvaziado e produtos devolvidos ao estoque.");
     }
 
     public List<ItemVenda> getItens() {
         return Collections.unmodifiableList(itens);
     }
 
-    public void exibirCarrinho() {
-        System.out.println("\n--- Conteúdo do Carrinho ---");
+    // Método digital: retorna resumo do carrinho como String
+    public String gerarResumoCarrinho() {
+        StringBuilder resumo = new StringBuilder();
+        resumo.append("--- Conteúdo do Carrinho ---\n");
+
         if (itens.isEmpty()) {
-            System.out.println("  Carrinho vazio.");
+            resumo.append("Carrinho vazio.\n");
         } else {
             for (ItemVenda item : itens) {
-                System.out.println("  - " + item.getProduto().getNome() +
-                        " (x" + item.getQuantidade() + ") - R$ " +
-                        String.format("%.2f", item.getPrecoVenda()) +
-                        " = R$ " + String.format("%.2f", (item.getPrecoVenda() * item.getQuantidade())));
+                resumo.append(String.format("- %s (x%d) - R$ %.2f = R$ %.2f\n",
+                        item.getProduto().getNome(),
+                        item.getQuantidade(),
+                        item.getPrecoVenda(),
+                        item.getPrecoVenda() * item.getQuantidade()));
             }
         }
-        System.out.println("Total do Carrinho: R$ " + String.format("%.2f", calcularTotal()));
-        System.out.println("----------------------------");
+
+        resumo.append(String.format("Total do Carrinho: R$ %.2f\n", calcularTotal()));
+        resumo.append("----------------------------");
+
+        return resumo.toString();
     }
 }

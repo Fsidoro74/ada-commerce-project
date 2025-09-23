@@ -7,6 +7,9 @@ import br.com.ada.ecommerce.model.Produto;
 import br.com.ada.ecommerce.model.StatusPedido;
 import br.com.ada.ecommerce.notificacao.Notificador;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PedidoService {
 
     private final Notificador notificador;
@@ -29,61 +32,67 @@ public class PedidoService {
     public void adicionarProdutoAoPedido(Pedido pedido, Produto produto, int quantidade) {
         produto.decrementarEstoque(quantidade);
         pedido.adicionarProduto(produto, quantidade);
-        System.out.println("Produto " + produto.getNome() + " adicionado ao pedido. Estoque atual: " + produto.getQuantidade());
     }
 
     /**
-     * Exibe um resumo do pedido.
+     * Retorna o resumo do pedido como String.
      */
-    public void exibirResumoPedido(Pedido pedido) {
-        pedido.exibirResumo();
+    public String gerarResumoPedido(Pedido pedido) {
+        return pedido.gerarResumo();
     }
 
     /**
      * Devolve os produtos de um pedido ao estoque.
      */
-    public void devolverProdutosAoEstoque(Pedido pedido) {
+    public List<String> devolverProdutosAoEstoque(Pedido pedido) {
+        List<String> logEstoque = new ArrayList<>();
         for (ItemPedido item : pedido.getItens()) {
             Produto produto = item.getProduto();
             int quantidade = item.getQuantidade();
             produto.incrementarEstoque(quantidade);
-            System.out.println("Produto " + produto.getNome() + " devolvido ao estoque. Estoque atual: " + produto.getQuantidade());
+            logEstoque.add(String.format("Produto '%s' devolvido ao estoque. Estoque atual: %d",
+                    produto.getNome(), produto.getQuantidade()));
         }
+        return logEstoque;
     }
 
     /**
      * Finaliza um pedido, alterando seu status e notificando o cliente.
      */
     public void finalizarPedido(Pedido pedido) {
-        if (pedido.calcularTotal() <= 0 || pedido.getItens().isEmpty()) {
+        if (!pedido.podeFinalizar()) {
             throw new IllegalArgumentException("Um pedido não pode ser finalizado sem itens ou com valor zero.");
         }
         pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);
-        notificador.notificar(pedido.getCliente(), "Seu pedido #" + pedido.getId() + " está aguardando pagamento.");
-        System.out.println("Pedido #" + pedido.getId() + " finalizado. Status: " + pedido.getStatus());
+        notificador.notificar(pedido.getCliente(),
+                String.format("Seu pedido #%d está aguardando pagamento.", pedido.getId()));
     }
 
     /**
      * Realiza o pagamento de um pedido, alterando seu status e notificando o cliente.
      */
     public void pagar(Pedido pedido) {
-        if (pedido.getStatus() != StatusPedido.AGUARDANDO_PAGAMENTO) {
-            throw new IllegalStateException("O pedido #" + pedido.getId() + " não pode ser pago neste momento. Status atual: " + pedido.getStatus());
+        if (!pedido.getStatus().podeSerPago()) {
+            throw new IllegalStateException(String.format(
+                    "O pedido #%d não pode ser pago neste momento. Status atual: %s",
+                    pedido.getId(), pedido.getStatus().getDescricao()));
         }
         pedido.setStatus(StatusPedido.PAGO);
-        notificador.notificar(pedido.getCliente(), "Seu pagamento do pedido #" + pedido.getId() + " foi confirmado com sucesso.");
-        System.out.println("Pedido #" + pedido.getId() + " pago. Status: " + pedido.getStatus());
+        notificador.notificar(pedido.getCliente(),
+                String.format("Seu pagamento do pedido #%d foi confirmado com sucesso.", pedido.getId()));
     }
 
     /**
      * Realiza a entrega de um pedido, alterando seu status e notificando o cliente.
      */
     public void entregar(Pedido pedido) {
-        if (pedido.getStatus() != StatusPedido.PAGO) {
-            throw new IllegalStateException("O pedido #" + pedido.getId() + " não pode ser entregue. Primeiro ele precisa ser pago. Status atual: " + pedido.getStatus());
+        if (!pedido.getStatus().podeSerEntregue()) {
+            throw new IllegalStateException(String.format(
+                    "O pedido #%d não pode ser entregue. Primeiro ele precisa ser pago. Status atual: %s",
+                    pedido.getId(), pedido.getStatus().getDescricao()));
         }
         pedido.setStatus(StatusPedido.FINALIZADO);
-        notificador.notificar(pedido.getCliente(), "Seu pedido #" + pedido.getId() + " foi entregue com sucesso!");
-        System.out.println("Pedido #" + pedido.getId() + " entregue. Status: " + pedido.getStatus());
+        notificador.notificar(pedido.getCliente(),
+                String.format("Seu pedido #%d foi entregue com sucesso!", pedido.getId()));
     }
 }

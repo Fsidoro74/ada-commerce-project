@@ -16,6 +16,7 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
+    // Getters e Setters
     public long getId() {
         return id;
     }
@@ -48,7 +49,11 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
+    // Operações de estoque
     public void decrementarEstoque(int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade inválida para remoção.");
+        }
         if (this.quantidade < quantidade) {
             throw new IllegalArgumentException("Estoque insuficiente para o produto: " + nome);
         }
@@ -56,19 +61,19 @@ public class Produto {
     }
 
     public void incrementarEstoque(int quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade inválida para incremento.");
+        }
         this.quantidade += quantidade;
     }
 
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", preco=" + preco +
-                ", quantidade=" + quantidade +
-                '}';
+    // Método digital: retorna resumo do produto
+    public String gerarResumo() {
+        return String.format("Produto #%d - %s | Preço: R$ %.2f | Estoque: %d",
+                id, nome, preco, quantidade);
     }
 
+    // Equals e HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

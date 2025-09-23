@@ -4,6 +4,7 @@ import br.com.ada.ecommerce.model.Cliente;
 import br.com.ada.ecommerce.repository.ClienteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ClienteService {
 
@@ -15,30 +16,30 @@ public class ClienteService {
     }
 
     /**
-     * Cadastra um novo cliente.
+     * Cadastra um novo cliente com validações.
      */
     public Cliente cadastrarCliente(String nome, String email, String documento) {
-        // Verifica se já existe cliente com este documento
-        if (buscarPorDocumento(documento) != null) {
-            throw new IllegalArgumentException("Documento já cadastrado no sistema");
+        if (documento == null || documento.trim().isEmpty()) {
+            throw new IllegalArgumentException("Documento é obrigatório.");
         }
 
-        // Gera ID único
+        if (buscarPorDocumento(documento).isPresent()) {
+            throw new IllegalArgumentException("Documento já cadastrado no sistema.");
+        }
+
         Long id = ++ultimoId;
         Cliente novoCliente = new Cliente(id, nome, email, documento);
         clienteRepository.salvar(novoCliente);
-        System.out.println("Cliente cadastrado com sucesso!");
         return novoCliente;
     }
 
     /**
      * Busca cliente por documento (CPF ou CNPJ).
      */
-    public Cliente buscarPorDocumento(String documento) {
+    public Optional<Cliente> buscarPorDocumento(String documento) {
         return clienteRepository.buscarTodos().stream()
-                                .filter(c -> c.getDocumento().equals(documento))
-                                .findFirst()
-                                .orElse(null);
+                .filter(c -> c.getDocumento().equals(documento))
+                .findFirst();
     }
 
     /**
@@ -51,8 +52,16 @@ public class ClienteService {
     /**
      * Remove cliente pelo ID.
      */
-    public void removerCliente(Long id) {
-        clienteRepository.remover(id);
-        System.out.println("Cliente removido com sucesso!");
+    public boolean removerCliente(Long id) {
+        Optional<Cliente> cliente = clienteRepository.buscarTodos().stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst();
+
+        if (cliente.isPresent()) {
+            clienteRepository.remover(id);
+            return true;
+        }
+
+        return false;
     }
 }

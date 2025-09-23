@@ -25,6 +25,7 @@ public class Venda {
         this.status = StatusPedido.ABERTO;
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -61,6 +62,11 @@ public class Venda {
         return new ArrayList<>(itens);
     }
 
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    // Operações
     public void adicionarItem(ItemVenda item) {
         this.itens.add(item);
         calcularValorTotal();
@@ -71,20 +77,42 @@ public class Venda {
         calcularValorTotal();
     }
 
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
     private void calcularValorTotal() {
         this.valorTotal = itens.stream()
                 .mapToDouble(item -> item.getPrecoVenda() * item.getQuantidade())
                 .sum();
     }
 
+    public boolean podeFinalizar() {
+        return !itens.isEmpty() && valorTotal > 0;
+    }
+
+    // Método digital: retorna resumo da venda
+    public String gerarResumo() {
+        StringBuilder resumo = new StringBuilder();
+        resumo.append("Venda #").append(id != null ? id : "N/A").append("\n");
+        resumo.append("Cliente: ").append(cliente != null ? cliente.getNome() : "Desconhecido").append("\n");
+        resumo.append("Data: ").append(dataVenda).append("\n");
+        resumo.append("Status: ").append(status.name()).append("\n");
+        resumo.append("Itens:\n");
+
+        for (ItemVenda item : itens) {
+            resumo.append("- ")
+                    .append(item.getProduto().getNome())
+                    .append(" x").append(item.getQuantidade())
+                    .append(" = R$ ").append(String.format("%.2f", item.getPrecoVenda() * item.getQuantidade()))
+                    .append("\n");
+        }
+
+        resumo.append("Valor Total: R$ ").append(String.format("%.2f", valorTotal));
+        return resumo.toString();
+    }
+
+    // Equals e HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Venda)) return false;
         Venda venda = (Venda) o;
         return Objects.equals(id, venda.id);
     }
@@ -92,16 +120,5 @@ public class Venda {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Venda{" +
-                "id=" + id +
-                ", cliente=" + cliente +
-                ", dataVenda=" + dataVenda +
-                ", status=" + status +
-                ", valorTotal=" + valorTotal +
-                '}';
     }
 }

@@ -16,8 +16,10 @@ public class ProdutoRepository {
      * @param produto O produto a ser salvo.
      */
     public void salvar(Produto produto) {
-        this.produtos.add(produto);
-        System.out.println("Produto " + produto.getNome() + " salvo no repositório.");
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não pode ser nulo.");
+        }
+        produtos.add(produto);
     }
 
     /**
@@ -25,7 +27,7 @@ public class ProdutoRepository {
      * @return Uma lista imutável de produtos.
      */
     public List<Produto> listarTodos() {
-        return Collections.unmodifiableList(produtos);
+        return Collections.unmodifiableList(new ArrayList<>(produtos));
     }
 
     /**
@@ -45,9 +47,12 @@ public class ProdutoRepository {
      * @return Um Optional contendo o produto, se encontrado.
      */
     public Optional<Produto> buscarPorNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            return Optional.empty();
+        }
+
         return produtos.stream()
-                .filter(p -> p.getNome().equalsIgnoreCase(nome))
+                .filter(p -> p.getNome().equalsIgnoreCase(nome.trim()))
                 .findFirst();
     }
 }
-

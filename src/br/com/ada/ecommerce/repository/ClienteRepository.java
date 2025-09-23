@@ -16,16 +16,18 @@ public class ClienteRepository {
      * @param cliente O cliente a ser salvo.
      */
     public void salvar(Cliente cliente) {
-        this.clientes.add(cliente);
-        System.out.println("Cliente " + cliente.getNome() + " salvo no repositório.");
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo.");
+        }
+        clientes.add(cliente);
     }
 
     /**
      * Retorna todos os clientes cadastrados.
      * @return Lista imutável de clientes.
      */
-    public List<Cliente> buscarTodos() { // ✅ nome alinhado com ClienteService
-        return Collections.unmodifiableList(clientes);
+    public List<Cliente> buscarTodos() {
+        return Collections.unmodifiableList(new ArrayList<>(clientes));
     }
 
     /**
@@ -34,9 +36,11 @@ public class ClienteRepository {
      * @return Optional contendo o cliente, se encontrado.
      */
     public Optional<Cliente> buscarPorId(Long id) {
+        if (id == null) return Optional.empty();
+
         return clientes.stream()
-                       .filter(c -> c.getId().equals(id))
-                       .findFirst();
+                .filter(c -> c.getId().equals(id))
+                .findFirst();
     }
 
     /**
@@ -45,16 +49,21 @@ public class ClienteRepository {
      * @return Optional contendo o cliente, se encontrado.
      */
     public Optional<Cliente> buscarPorDocumento(String documento) {
+        if (documento == null || documento.trim().isEmpty()) {
+            return Optional.empty();
+        }
+
         return clientes.stream()
-                       .filter(c -> c.getDocumento().equalsIgnoreCase(documento))
-                       .findFirst();
+                .filter(c -> c.getDocumento().equalsIgnoreCase(documento.trim()))
+                .findFirst();
     }
 
     /**
      * Remove um cliente pelo ID.
      * @param id ID do cliente a ser removido.
      */
-    public void remover(Long id) { // ✅ adicionado para alinhar com ClienteService
+    public void remover(Long id) {
+        if (id == null) return;
         clientes.removeIf(c -> c.getId().equals(id));
     }
 }

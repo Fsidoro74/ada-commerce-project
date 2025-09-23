@@ -2,13 +2,16 @@ package br.com.ada.ecommerce.notificacao;
 
 import br.com.ada.ecommerce.model.Cliente;
 
-public class EmailNotificador implements br.com.ada.ecommerce.notificacao.Notificador {
+public class EmailNotificador implements Notificador {
 
     @Override
     public void notificar(Cliente cliente, String mensagem) {
-        // Simulação de envio de e-mail
-        System.out.println("Enviando e-mail para " + cliente.getDocumento() + ": " + mensagem);
+        // Simulação silenciosa de envio de e-mail
+    }
+
+    @Override
+    public String gerarMensagemSimulada(Cliente cliente, String mensagem) {
+        return String.format("📧 E-mail para %s (%s): %s",
+                cliente.getNome(), cliente.getEmail(), mensagem);
     }
 }
-
-

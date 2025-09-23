@@ -16,6 +16,7 @@ public class Pedido {
         this.cliente = cliente;
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -36,6 +37,15 @@ public class Pedido {
         return new ArrayList<>(itens);
     }
 
+    public StatusPedido getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusPedido status) {
+        this.status = status;
+    }
+
+    // Operações
     public void adicionarItem(ItemPedido item) {
         this.itens.add(item);
     }
@@ -59,26 +69,27 @@ public class Pedido {
         return !itens.isEmpty() && calcularTotal() > 0;
     }
 
-    public StatusPedido getStatus() {
-        return status;
-    }
+    // Novo método: retorna resumo como String
+    public String gerarResumo() {
+        StringBuilder resumo = new StringBuilder();
+        resumo.append("Resumo do Pedido #").append(id).append("\n");
+        resumo.append("Cliente: ").append(cliente.getNome()).append("\n");
 
-    public void setStatus(StatusPedido status) {
-        this.status = status;
-    }
-
-    public void exibirResumo() {
-        System.out.println("Resumo do Pedido #" + id);
-        System.out.println("Cliente: " + cliente.getNome());
         for (ItemPedido item : itens) {
-            System.out.println("- " + item.getProduto().getNome() +
-                    " x" + item.getQuantidade() +
-                    " = R$ " + item.calcularSubtotal());
+            resumo.append("- ")
+                    .append(item.getProduto().getNome())
+                    .append(" x").append(item.getQuantidade())
+                    .append(" = R$ ").append(String.format("%.2f", item.calcularSubtotal()))
+                    .append("\n");
         }
-        System.out.println("Total: R$ " + calcularTotal());
-        System.out.println("Status: " + status);
+
+        resumo.append("Total: R$ ").append(String.format("%.2f", calcularTotal())).append("\n");
+        resumo.append("Status: ").append(status.name());
+
+        return resumo.toString();
     }
 
+    // Equals e HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
