@@ -3,87 +3,56 @@ package br.com.ada.ecommerce.model;
 import java.util.Objects;
 
 public class Produto {
-
-    private long id;
+    private Long id;
     private String nome;
     private double preco;
-    private int quantidade; // estoque disponível
+    private int quantidade;
 
-    public Produto(long id, String nome, double preco, int quantidade) {
-        this.id = id;
-        this.nome = nome;
-        this.preco = preco;
-        this.quantidade = quantidade;
-    }
-
-    // Getters e Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public Produto(Long id, String nome, double preco, int quantidade) {
+        setNome(nome);
+        setPreco(preco);
+        setQuantidade(quantidade);
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getNome() { return nome; }
     public void setNome(String nome) {
+        if (nome == null || nome.isBlank()) throw new IllegalArgumentException("Nome obrigatório.");
         this.nome = nome;
     }
-
-    public double getPreco() {
-        return preco;
-    }
-
+    public double getPreco() { return preco; }
     public void setPreco(double preco) {
+        if (preco <= 0) throw new IllegalArgumentException("Preço deve ser maior que zero.");
         this.preco = preco;
     }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
+    public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) {
+        if (quantidade < 0) throw new IllegalArgumentException("Quantidade não pode ser negativa.");
         this.quantidade = quantidade;
     }
 
-    // Operações de estoque
-    public void decrementarEstoque(int quantidade) {
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade inválida para remoção.");
-        }
-        if (this.quantidade < quantidade) {
-            throw new IllegalArgumentException("Estoque insuficiente para o produto: " + nome);
-        }
-        this.quantidade -= quantidade;
+    public void decrementarEstoque(int valor) {
+        if (valor > quantidade) throw new IllegalArgumentException("Estoque insuficiente.");
+        this.quantidade -= valor;
     }
 
-    public void incrementarEstoque(int quantidade) {
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade inválida para incremento.");
-        }
-        this.quantidade += quantidade;
+    public void incrementarEstoque(int valor) {
+        if (valor <= 0) throw new IllegalArgumentException("Valor de incremento deve ser positivo.");
+        this.quantidade += valor;
     }
 
-    // Método digital: retorna resumo do produto
-    public String gerarResumo() {
-        return String.format("Produto #%d - %s | Preço: R$ %.2f | Estoque: %d",
-                id, nome, preco, quantidade);
-    }
-
-    // Equals e HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Produto)) return false;
         Produto produto = (Produto) o;
-        return id == produto.id;
+        return Objects.equals(nome, produto.nome);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(nome);
     }
 }

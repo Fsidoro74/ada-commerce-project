@@ -1,69 +1,98 @@
 package br.com.ada.ecommerce.main;
 
 import br.com.ada.ecommerce.model.Cliente;
-import br.com.ada.ecommerce.model.Produto;
+import br.com.ada.ecommerce.model.Cupom;
 import br.com.ada.ecommerce.model.Pedido;
-import br.com.ada.ecommerce.repository.ClienteRepository;
-import br.com.ada.ecommerce.repository.ProdutoRepository;
-import br.com.ada.ecommerce.service.PedidoService;
-import br.com.ada.ecommerce.notificacao.Notificador;
 import br.com.ada.ecommerce.notificacao.EmailNotificador;
+import br.com.ada.ecommerce.notificacao.Notificador;
 import br.com.ada.ecommerce.notificacao.SMSNotificador;
+import br.com.ada.ecommerce.repository.ClienteRepository;
+import br.com.ada.ecommerce.repository.CupomRepository;
+import br.com.ada.ecommerce.repository.ProdutoRepository;
+import br.com.ada.ecommerce.service.CupomService;
+import br.com.ada.ecommerce.service.PedidoService;
+import br.com.ada.ecommerce.view.ClienteView;
+import br.com.ada.ecommerce.view.CupomView;
+import br.com.ada.ecommerce.view.PedidoView;
+import br.com.ada.ecommerce.view.ProdutoView;
 
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("--- Ada Commerce Iniciado ---");
 
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // Repositórios
         ClienteRepository clienteRepository = new ClienteRepository();
         ProdutoRepository produtoRepository = new ProdutoRepository();
+        CupomRepository cupomRepository = new CupomRepository();
 
-        // Escolher tipo de notificação
+        // Cupons pré-cadastrados
+        cupomRepository.salvar(new Cupom(null, "ADA10", 10, true, LocalDate.now().plusDays(10)));
+        cupomRepository.salvar(new Cupom(null, "FIXO50", 50, false, LocalDate.now().plusDays(5)));
+
+        // Views
+        ClienteView clienteView = new ClienteView(scanner, clienteRepository);
+        ProdutoView produtoView = new ProdutoView(scanner, produtoRepository);
+        CupomView cupomView = new CupomView(scanner, cupomRepository);
+        PedidoView pedidoView;
+
+        // Notificador
         System.out.println("Escolha o tipo de notificação:");
         System.out.println("1 - E-mail");
         System.out.println("2 - SMS");
         System.out.print("Opção: ");
-        int opcao = scanner.nextInt();
+        int tipo = scanner.nextInt();
+        scanner.nextLine();
 
-        Notificador notificador = (opcao == 2) ? new SMSNotificador() : new EmailNotificador();
-        String tipoNotificacao = (opcao == 2) ? "SMS" : "E-mail";
-
-        System.out.println("\n📢 Notificação escolhida: " + tipoNotificacao + "\n");
-
-        // Serviço de pedidos com notificador
+        Notificador notificador = (tipo == 2) ? new SMSNotificador() : new EmailNotificador();
         PedidoService pedidoService = new PedidoService(notificador);
+        CupomService cupomService = new CupomService(cupomRepository);
+        pedidoView = new PedidoView(scanner, pedidoService, produtoRepository, cupomService);
 
-        // 1. Cadastrar cliente
-        Cliente cliente1 = new Cliente(1L, "João Silva", "joao@email.com", "12345678901");
-        clienteRepository.salvar(cliente1);
+        Pedido pedidoAtual = null;
+        boolean executando = true;
 
-        // 2. Cadastrar produtos
-        Produto notebook = new Produto(1L, "Notebook", 3500.00, 10);
-        Produto celular = new Produto(2L, "Celular", 2200.00, 5);
-        produtoRepository.salvar(notebook);
-        produtoRepository.salvar(celular);
+        System.out.println("--- Ada Commerce Iniciado ---");
 
-        // 3. Criar pedido e adicionar itens
-        Pedido pedido = new Pedido(1L, cliente1);
-        pedidoService.adicionarProdutoAoPedido(pedido, notebook, 1);
-        pedidoService.adicionarProdutoAoPedido(pedido, celular, 2);
+        while (executando) {
+            System.out.println("\n📋 Menu Principal:");
+            System.out.println("1 - Cadastrar cliente");
+            System.out.println("2 - Cadastrar produto");
+            System.out.println("3 - Criar pedido");
+            System.out.println("4 - Adicionar item ao pedido");
+            System.out.println("5 - Finalizar pedido");
+            System.out.println("6 - Pagar pedido");
+            System.out.println("7 - Entregar pedido");
+            System.out.println("8 - Aplicar cupom de desconto");
+            System.out.println("9 - Listar cupons disponíveis");
+            System.out.println("10 - Atualizar cupom de desconto");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        // 4. Exibir resumo inicial
-        System.out.println("📄 Resumo do Pedido Inicial:");
-        System.out.println(pedidoService.gerarResumoPedido(pedido));
-
-        // 5. Finalizar, pagar e entregar
-        pedidoService.finalizarPedido(pedido);
-        pedidoService.pagar(pedido);
-        pedidoService.entregar(pedido);
-
-        // 6. Exibir resumo final
-        System.out.println("📦 Resumo do Pedido Final:");
-        System.out.println(pedidoService.gerarResumoPedido(pedido));
+            switch (opcao) {
+                case 1 -> clienteView.cadastrarCliente();
+                case 2 -> produtoView.cadastrarProduto();
+                case 3 -> pedidoAtual = pedidoView.criarPedido(clienteRepository);
+                case 4 -> pedidoView.adicionarItemAoPedido(pedidoAtual);
+                case 5 -> pedidoView.finalizarPedido(pedidoAtual);
+                case 6 -> pedidoView.pagarPedido(pedidoAtual);
+                case 7 -> pedidoView.entregarPedido(pedidoAtual);
+                case 8 -> pedidoView.aplicarCupom(pedidoAtual);
+                case 9 -> cupomView.listarCupons();
+                case 10 -> cupomView.atualizarCupom();
+                case 0 -> {
+                    executando = false;
+                    System.out.println("👋 Encerrando o sistema...");
+                }
+                default -> System.out.println("❌ Opção inválida.");
+            }
+        }
 
         scanner.close();
     }
