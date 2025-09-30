@@ -3,6 +3,7 @@ package br.com.ada.ecommerce.view;
 import br.com.ada.ecommerce.model.Cliente;
 import br.com.ada.ecommerce.repository.ClienteRepository;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ClienteView {
@@ -55,7 +56,7 @@ public class ClienteView {
         System.out.print("E-mail: ");
         String email = scanner.nextLine();
 
-        Cliente cliente = new Cliente(null, nome, documento, email);
+        Cliente cliente = new Cliente(nome, documento, email);
         clienteRepository.salvar(cliente);
 
         System.out.println("✅ Cliente cadastrado com sucesso.");
@@ -73,11 +74,13 @@ public class ClienteView {
         System.out.print("Digite o documento do cliente que deseja atualizar: ");
         String documento = scanner.nextLine();
 
-        Cliente cliente = clienteRepository.buscarPorDocumento(documento);
-        if (cliente == null) {
+        Optional<Cliente> clienteOpt = clienteRepository.buscarPorDocumento(documento);
+        if (clienteOpt.isEmpty()) {
             System.out.println("❌ Cliente não encontrado.");
             return;
         }
+
+        Cliente cliente = clienteOpt.get();
 
         System.out.print("Novo nome: ");
         String novoNome = scanner.nextLine();

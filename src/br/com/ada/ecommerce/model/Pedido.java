@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class Pedido {
 
+    private static long contadorId = 1;
+
     private Long id;
     private Cliente cliente;
     private LocalDate dataCriacao;
@@ -14,6 +16,15 @@ public class Pedido {
     private List<ItemPedido> itens = new ArrayList<>();
     private double desconto = 0.0;
 
+    // Novo construtor com ID automático
+    public Pedido(Cliente cliente) {
+        this.id = contadorId++;
+        this.cliente = cliente;
+        this.dataCriacao = LocalDate.now();
+        this.status = StatusPedido.ABERTO;
+    }
+
+    // Construtor original mantido para compatibilidade
     public Pedido(Long id, Cliente cliente) {
         this.id = id;
         this.cliente = cliente;
@@ -22,36 +33,17 @@ public class Pedido {
     }
 
     // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public StatusPedido getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusPedido status) {
-        this.status = status;
-    }
-
-    public List<ItemPedido> getItens() {
-        return new ArrayList<>(itens);
-    }
-
-    public double getDesconto() {
-        return desconto;
-    }
+    public Long getId() { return id; }
+    public Cliente getCliente() { return cliente; }
+    public LocalDate getDataCriacao() { return dataCriacao; }
+    public StatusPedido getStatus() { return status; }
+    public void setStatus(StatusPedido status) { this.status = status; }
+    public List<ItemPedido> getItens() { return new ArrayList<>(itens); }
+    public double getDesconto() { return desconto; }
 
     public void aplicarDesconto(double valor) {
-        this.desconto = valor;
+        double total = calcularTotal();
+        this.desconto = Math.min(valor, total); // Evita desconto maior que o total
     }
 
     // Operações
@@ -108,7 +100,6 @@ public class Pedido {
         return resumo.toString();
     }
 
-    // Equals e HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

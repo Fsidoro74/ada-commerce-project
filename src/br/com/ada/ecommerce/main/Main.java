@@ -1,6 +1,5 @@
 package br.com.ada.ecommerce.main;
 
-import br.com.ada.ecommerce.model.Cliente;
 import br.com.ada.ecommerce.model.Cupom;
 import br.com.ada.ecommerce.model.Pedido;
 import br.com.ada.ecommerce.notificacao.EmailNotificador;
@@ -17,7 +16,6 @@ import br.com.ada.ecommerce.view.PedidoView;
 import br.com.ada.ecommerce.view.ProdutoView;
 
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {

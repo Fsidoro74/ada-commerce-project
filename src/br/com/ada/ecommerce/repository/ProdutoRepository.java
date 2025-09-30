@@ -4,6 +4,7 @@ import br.com.ada.ecommerce.model.Produto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProdutoRepository {
 
@@ -11,6 +12,9 @@ public class ProdutoRepository {
     private Long proximoId = 1L;
 
     public void salvar(Produto produto) {
+        if (buscarPorCodigo(produto.getCodigo()).isPresent()) {
+            throw new IllegalArgumentException("Produto com este código já existe.");
+        }
         produto.setId(proximoId++);
         produtos.add(produto);
     }
@@ -19,22 +23,29 @@ public class ProdutoRepository {
         return new ArrayList<>(produtos);
     }
 
-    public Produto buscarPorNome(String nome) {
-        for (Produto produto : produtos) {
-            if (produto.getNome().equalsIgnoreCase(nome)) {
-                return produto;
-            }
-        }
-        return null;
+    public Optional<Produto> buscarPorNome(String nome) {
+        return produtos.stream()
+                .filter(p -> p.getNome().equalsIgnoreCase(nome))
+                .findFirst();
+    }
+
+    public Optional<Produto> buscarPorCodigo(String codigo) {
+        return produtos.stream()
+                .filter(p -> p.getCodigo().equalsIgnoreCase(codigo))
+                .findFirst();
     }
 
     public void atualizar(Produto produtoAtualizado) {
         for (int i = 0; i < produtos.size(); i++) {
-            Produto produto = produtos.get(i);
-            if (produto.getId().equals(produtoAtualizado.getId())) {
+            if (produtos.get(i).getId().equals(produtoAtualizado.getId())) {
                 produtos.set(i, produtoAtualizado);
                 return;
             }
         }
+        throw new IllegalArgumentException("Produto não encontrado para atualização.");
+    }
+
+    public void remover(Long id) {
+        produtos.removeIf(p -> p.getId().equals(id));
     }
 }

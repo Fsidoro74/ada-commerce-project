@@ -4,6 +4,7 @@ import br.com.ada.ecommerce.model.Cliente;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClienteRepository {
 
@@ -11,6 +12,9 @@ public class ClienteRepository {
     private Long proximoId = 1L;
 
     public void salvar(Cliente cliente) {
+        if (buscarPorDocumento(cliente.getDocumento()).isPresent()) {
+            throw new IllegalArgumentException("Cliente com este documento já existe.");
+        }
         cliente.setId(proximoId++);
         clientes.add(cliente);
     }
@@ -19,22 +23,27 @@ public class ClienteRepository {
         return new ArrayList<>(clientes);
     }
 
-    public Cliente buscarPorDocumento(String documento) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getDocumento().equalsIgnoreCase(documento)) {
-                return cliente;
-            }
-        }
-        return null;
+    public Optional<Cliente> buscarPorDocumento(String documento) {
+        return clientes.stream()
+                .filter(c -> c.getDocumento().equalsIgnoreCase(documento))
+                .findFirst();
+    }
+
+    public Optional<Cliente> buscarPorCpf(String cpf) {
+        return buscarPorDocumento(cpf); // Reutiliza a lógica existente
     }
 
     public void atualizar(Cliente clienteAtualizado) {
         for (int i = 0; i < clientes.size(); i++) {
-            Cliente cliente = clientes.get(i);
-            if (cliente.getId().equals(clienteAtualizado.getId())) {
+            if (clientes.get(i).getId().equals(clienteAtualizado.getId())) {
                 clientes.set(i, clienteAtualizado);
                 return;
             }
         }
+        throw new IllegalArgumentException("Cliente não encontrado para atualização.");
+    }
+
+    public void remover(Long id) {
+        clientes.removeIf(c -> c.getId().equals(id));
     }
 }

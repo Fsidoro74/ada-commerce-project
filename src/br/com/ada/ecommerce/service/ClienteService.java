@@ -28,17 +28,17 @@ public class ClienteService {
         }
 
         Long id = ++ultimoId;
-        Cliente novoCliente = new Cliente(id, nome, email, documento);
+        Cliente novoCliente = new Cliente(id, nome, documento, email);
         clienteRepository.salvar(novoCliente);
         return novoCliente;
     }
 
     /**
-     * Busca cliente por documento (CPF ou CNPJ).
+     * Busca cliente por documento (CPF ou RG).
      */
     public Optional<Cliente> buscarPorDocumento(String documento) {
-        return clienteRepository.buscarTodos().stream()
-                .filter(c -> c.getDocumento().equals(documento))
+        return clienteRepository.listarTodos().stream()
+                .filter(c -> c.getDocumento().equalsIgnoreCase(documento))
                 .findFirst();
     }
 
@@ -46,14 +46,14 @@ public class ClienteService {
      * Lista todos os clientes.
      */
     public List<Cliente> listarTodos() {
-        return clienteRepository.buscarTodos();
+        return clienteRepository.listarTodos();
     }
 
     /**
      * Remove cliente pelo ID.
      */
     public boolean removerCliente(Long id) {
-        Optional<Cliente> cliente = clienteRepository.buscarTodos().stream()
+        Optional<Cliente> cliente = clienteRepository.listarTodos().stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst();
 

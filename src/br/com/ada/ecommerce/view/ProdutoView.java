@@ -3,6 +3,7 @@ package br.com.ada.ecommerce.view;
 import br.com.ada.ecommerce.model.Produto;
 import br.com.ada.ecommerce.repository.ProdutoRepository;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ProdutoView {
@@ -41,6 +42,9 @@ public class ProdutoView {
     public void cadastrarProduto() {
         System.out.println("📋 Cadastro de Produto");
 
+        System.out.print("Código: ");
+        String codigo = scanner.nextLine();
+
         System.out.print("Nome: ");
         String nome = scanner.nextLine();
 
@@ -51,7 +55,7 @@ public class ProdutoView {
         int quantidade = scanner.nextInt();
         scanner.nextLine();
 
-        Produto produto = new Produto(null, nome, preco, quantidade);
+        Produto produto = new Produto(codigo, nome, preco, quantidade);
         produtoRepository.salvar(produto);
 
         System.out.println("✅ Produto cadastrado com sucesso.");
@@ -60,8 +64,8 @@ public class ProdutoView {
     public void listarProdutos() {
         System.out.println("\n📦 Lista de Produtos:");
         for (Produto produto : produtoRepository.listarTodos()) {
-            System.out.printf("ID: %d | Nome: %s | Preço: R$ %.2f | Estoque: %d\n",
-                    produto.getId(), produto.getNome(), produto.getPreco(), produto.getQuantidade());
+            System.out.printf("ID: %d | Código: %s | Nome: %s | Preço: R$ %.2f | Estoque: %d\n",
+                    produto.getId(), produto.getCodigo(), produto.getNome(), produto.getPreco(), produto.getQuantidade());
         }
     }
 
@@ -69,11 +73,13 @@ public class ProdutoView {
         System.out.print("Digite o nome do produto que deseja atualizar: ");
         String nome = scanner.nextLine();
 
-        Produto produto = produtoRepository.buscarPorNome(nome);
-        if (produto == null) {
+        Optional<Produto> produtoOpt = produtoRepository.buscarPorNome(nome);
+        if (produtoOpt.isEmpty()) {
             System.out.println("❌ Produto não encontrado.");
             return;
         }
+
+        Produto produto = produtoOpt.get();
 
         System.out.print("Novo preço: ");
         double novoPreco = scanner.nextDouble();
