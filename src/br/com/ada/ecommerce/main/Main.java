@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -68,6 +67,8 @@ public class Main {
             System.out.println("8 - Aplicar cupom de desconto");
             System.out.println("9 - Listar cupons disponíveis");
             System.out.println("10 - Atualizar cupom de desconto");
+            System.out.println("11 - Atualizar cliente");
+            System.out.println("12 - Atualizar produto");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
             int opcao = scanner.nextInt();
@@ -77,13 +78,45 @@ public class Main {
                 case 1 -> clienteView.cadastrarCliente();
                 case 2 -> produtoView.cadastrarProduto();
                 case 3 -> pedidoAtual = pedidoView.criarPedido(clienteRepository);
-                case 4 -> pedidoView.adicionarItemAoPedido(pedidoAtual);
-                case 5 -> pedidoView.finalizarPedido(pedidoAtual);
-                case 6 -> pedidoView.pagarPedido(pedidoAtual);
-                case 7 -> pedidoView.entregarPedido(pedidoAtual);
-                case 8 -> pedidoView.aplicarCupom(pedidoAtual);
+                case 4 -> {
+                    if (pedidoAtual == null) {
+                        System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
+                        break;
+                    }
+                    pedidoView.adicionarItemAoPedido(pedidoAtual);
+                }
+                case 5 -> {
+                    if (pedidoAtual == null) {
+                        System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
+                        break;
+                    }
+                    pedidoView.finalizarPedido(pedidoAtual);
+                }
+                case 6 -> {
+                    if (pedidoAtual == null) {
+                        System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
+                        break;
+                    }
+                    pedidoView.pagarPedido(pedidoAtual);
+                }
+                case 7 -> {
+                    if (pedidoAtual == null) {
+                        System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
+                        break;
+                    }
+                    pedidoView.entregarPedido(pedidoAtual);
+                }
+                case 8 -> {
+                    if (pedidoAtual == null) {
+                        System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
+                        break;
+                    }
+                    pedidoView.aplicarCupom(pedidoAtual);
+                }
                 case 9 -> cupomView.listarCupons();
                 case 10 -> cupomView.atualizarCupom();
+                case 11 -> clienteView.atualizarCliente();
+                case 12 -> produtoView.atualizarProduto();
                 case 0 -> {
                     executando = false;
                     System.out.println("👋 Encerrando o sistema...");
@@ -91,7 +124,6 @@ public class Main {
                 default -> System.out.println("❌ Opção inválida.");
             }
         }
-
         scanner.close();
     }
 }
