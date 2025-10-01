@@ -85,6 +85,10 @@ public class Main {
                     }
                     pedidoView.adicionarItemAoPedido(pedidoAtual);
                 }
+HEAD
+
+
+55fb5cbb0acc6873f404f5721f18129df4adc8ad
                 case 5 -> {
                     if (pedidoAtual == null) {
                         System.out.println("⚠️ Crie um pedido primeiro (opção 3).");
